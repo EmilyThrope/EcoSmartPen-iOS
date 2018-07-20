@@ -487,29 +487,6 @@ NSMutableArray  *catsArray;
     [self doneButtonClick:nil];
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        //remove the deleted object from your data source.
-        //If your data source is an NSMutableArray, do this
-        NSString *catName = (NSString*)[catsArray objectAtIndex:indexPath.section];
-        [self deleteCartride:catName];
-        [catsArray removeObjectAtIndex:indexPath.section];
-        [tableView reloadData];
-        // tell table to refresh now
-
-        ///////////////////////////////
-        NSString *email = [self getSavedEmail];
-        
-        NSMutableDictionary *jsonDic = [[NSMutableDictionary alloc] init];
-        [jsonDic setValue:email forKey:@"email"];
-        [jsonDic setValue:catName forKey:@"cartridge"];
-        [self sendDeleteCartridge:jsonDic];
-    }
-}
 
 -(void) gotoSelectCatridge
 {
@@ -601,28 +578,6 @@ NSMutableArray  *catsArray;
         }
     }
     [self.catTableView reloadData];
-}
-
--(void)deleteCartride:(NSString*)cartrideName
-{
-    NSString * paths=[self getWritableDBPath];
-    const char *dbpath =  [paths UTF8String];
-    sqlite3_stmt    *statement;
-    static sqlite3 *database = nil;
-    
-    if(sqlite3_open_v2([paths cStringUsingEncoding:NSUTF8StringEncoding], &database, SQLITE_OPEN_READWRITE, NULL) == SQLITE_OK)
-    {
-        NSString *querySQL = [NSString stringWithFormat: @"DELETE FROM catridgeInfo WHERE SampleName = '%@'", cartrideName,nil];
-        const char *query_stmt51 = [querySQL UTF8String];
-        sqlite3_busy_timeout(database, 500);
-        char *errMsg;
-        if(sqlite3_exec(database, query_stmt51, NULL, NULL, &errMsg) != SQLITE_OK)
-            NSLog( @"Delete catridgeInfo: %s, %s", sqlite3_errmsg(database), errMsg );
-        
-        sqlite3_busy_timeout(database, 100);
-        sqlite3_close(database);
-    }
-
 }
 
 
@@ -755,86 +710,6 @@ NSMutableArray  *catsArray;
             sqlite3_close(database);
         }
     }
-}
-
-#pragma mark - get/set
--(NSString*)getSavedEmail
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *result = @"guest";
-    if (standardUserDefaults) {
-        result=(NSString*)[standardUserDefaults valueForKey:KEY_EMAIL];
-        if(result == nil)
-            result = @"guest";
-    }
-    return result;
-}
-
--(NSString*)getSavedName
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *result = @"guest";
-    if (standardUserDefaults) {
-        result=(NSString*)[standardUserDefaults valueForKey:KEY_FIRSTNAME];
-        if(result == nil)
-            result = @"guest";
-    }
-    return result;
-}
-#pragma mark - WebApi
-
--(void) sendDeleteCartridge:(NSMutableDictionary*)jsonDic
-{
-    
-    NSString *strName = [self getSavedName];
-    if([strName isEqualToString:@"Guest"])
-    {
-        return;
-    }
-    
-    NSString *SEND_URL = @"http://opuluslabs.com/cartridge_delete.php";
-    
-    NSURL *url = [NSURL URLWithString:SEND_URL];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    
-    NSLog(@"data - %@",jsonDic);
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonDic options:kNilOptions error:nil];
-    
-    NSString *postlength = [NSString stringWithFormat:@"%d", (int)[jsonData length]];
-    
-    [request setHTTPMethod:@"POST"];
-    [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:postlength forHTTPHeaderField:@"Content-Length"];
-    [request setHTTPBody:jsonData];
-    
-    
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    //[self showProgress];
-    [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        
-        if(data == nil)
-        {
-            //[self hideProgress];
-            return;
-        }
-        
-        NSDictionary *jDic = [NSJSONSerialization JSONObjectWithData:data
-                                                             options:0
-                                                               error:NULL];
-        NSLog(@"result: %@", jDic);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            //[self hideProgress];
-            if([jDic objectForKey:@"cartridge"])
-            {
-                NSLog(@"success");
-            }
-            else
-            {
-                NSLog(@"server error");
-            }
-        });
-    }] resume];
 }
 
 #pragma mark - get Image Info

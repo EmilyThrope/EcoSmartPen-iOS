@@ -125,10 +125,9 @@
     int width = self.view.frame.size.width;
     _scrollFFView.contentSize = CGSizeMake(width*3, 230);
     
-    
-    _btnUserImage.layer.cornerRadius= 25;
-    _btnUserImage.clipsToBounds = true;
-    
+    // Dragon_3
+    _btnUserImage.layer.cornerRadius  = _btnUserImage.frame.size.width / 2;
+    _btnUserImage.clipsToBounds = YES;
 }
 
 
@@ -523,10 +522,10 @@
 - (IBAction)childSafetyButtonClick:(id)sender {
     //[_mChildSafetyView setHidden:NO];
     NSString *str = _lblTotal.text;
-    if([str isEqualToString:@"Child Safety ON"])
+    if([str isEqualToString:@"Child Safety OFF"]) // Dragon_3
         [self childSafetyOffButtonClick:nil];
     else
-         [self childSafetyOnButtonClick:nil];
+        [self childSafetyOnButtonClick:nil];
 }
 
 - (IBAction)childSafetyOffButtonClick:(id)sender {
@@ -537,7 +536,8 @@
     data[2] = 1;
     NSData *cmdData = [[NSData alloc] initWithBytes:data length:3];
     //gotoFlag = 1;
-    [self sendBLEData:cmdData];}
+    [self sendBLEData:cmdData];
+}
 
 - (IBAction)childSafetyOnButtonClick:(id)sender {
     NSLog(@"Off Button Click");
@@ -648,7 +648,7 @@
     {
         if([[checkFeelingArray objectAtIndex:i] boolValue] == true)
         {
-            if(i % 2 == 0)
+            if(i % 4 <2)
             {
                 count++;
             }
@@ -658,7 +658,7 @@
             }
         }
     }
-    coinTempValue = coinTempValue + count;
+    coinValue = coinTempValue + count;
     
     [self hideFeelings];
     [autoSaveTimer invalidate];
@@ -666,14 +666,6 @@
     [self showSymptoms];
     save_allow = false;
     feelingSaveFlag = true;
-    
-    ////////////////////////////////////////////////////////////
-    levelCount = 0;
-    NSString *nameStr = [NSString stringWithFormat:@"vape_level_%d", levelCount];
-    _imgVapeLevel.image = [UIImage imageNamed:nameStr];
-    coinValue = coinTempValue;
-    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(updateCoin) userInfo:nil repeats:NO];
-
 }
 
 -(void) nextDrawFeelingProcess
@@ -713,8 +705,6 @@
     [self loadFeeling:tempRArray];
     tempArray = nil;
     saveFeel = [NSString stringWithString: feelStr];
-    
-    
 }
 
 - (IBAction)feelingCancelButtonClick:(id)sender {
@@ -801,6 +791,7 @@
     
     [self sendMyVape:saveFeel symptoms:saveSymp];
     
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(updateCoin) userInfo:nil repeats:NO];
 }
 
 -(void) updateCoin
@@ -855,16 +846,15 @@
 - (IBAction)tellUSButtonClick:(id)sender {
     [self hideConfirmFeeling];
     [self showFeelings];
-    
-    coinTempValue = coinValue;
     if(feel_state == 2)
     {
-        coinTempValue -= 1;
+        coinValue -= 1;
     }
     else if(feel_state == 1)
     {
-        coinTempValue += 1;
+        coinValue += 1;
     }
+    coinTempValue = coinValue;
 }
 
 - (IBAction)anotherDoesButtonClick:(id)sender {
@@ -877,13 +867,6 @@
     {
         coinValue += 1;
     }
-    ///////////////////////////////////////////////
-    levelCount = 0;
-    NSString *nameStr = [NSString stringWithFormat:@"vape_level_%d", levelCount];
-    _imgVapeLevel.image = [UIImage imageNamed:nameStr];
-    [_btnFeelYes setImage:[UIImage imageNamed:@"feel_yes"] forState:UIControlStateNormal];
-    [_btnFeelNo setImage:[UIImage imageNamed:@"feel_no"] forState:UIControlStateNormal];
-    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(updateCoin) userInfo:nil repeats:NO];
 }
 
 #pragma mark - Move Function
@@ -2625,10 +2608,12 @@
         case CHILD_SAFETY_ON_NONE:
             [_childSafetyButton setImage:simage_childonnone forState:UIControlStateNormal];
             [_childSafetyButton setEnabled:false];
+            _lblTotal.text = @"Child Safety ON";   // Dragon_3
             break;
         case CHILD_SAFETY_OFF_NONE:
             [_childSafetyButton setImage:simage_childoffnone forState:UIControlStateNormal];
             [_childSafetyButton setEnabled:false];
+            _lblTotal.text = @"Child Safety OFF";    // Dragon_3
             break;
         case CHILD_SAFETY_ON:
             [_childSafetyButton setImage:[UIImage imageNamed:@"child_on_btn"] forState:UIControlStateNormal];
@@ -2636,7 +2621,7 @@
             [_childSafetyButton setEnabled:true];
             _lblChildOn.font = [UIFont boldSystemFontOfSize:22.0];
             _lblChildOff.font = [UIFont systemFontOfSize:20.0];
-            _lblTotal.text = @"Child Safety ON";
+            _lblTotal.text = @"Child Safety OFF";   // Dragon_3
             break;
         case CHILD_SAFETY_OFF:
             [_childSafetyButton setImage:[UIImage imageNamed:@"child_off_btn"] forState:UIControlStateNormal];
@@ -2644,7 +2629,7 @@
             [_childSafetyButton setEnabled:true];
             _lblChildOff.font = [UIFont boldSystemFontOfSize:22.0];
             _lblChildOn.font = [UIFont systemFontOfSize:20.0];
-            _lblTotal.text = @"Child Safety OFF";
+            _lblTotal.text = @"Child Safety ON";    // Dragon_3
             break;
     }
 }
@@ -3433,7 +3418,9 @@
     NSLog(@"\nfilePath : %@ \n", filePath);
     if([fm fileExistsAtPath:filePath isDirectory:nil])
     {
-        [_btnUserImage setImage:[self getImage:userName] forState:UIControlStateNormal];
+//        [_btnUserImage setImage:[self getImage:userName] forState:UIControlStateNormal];
+        [_btnUserImage setImage:[self cropImage:[self getImage:userName]] forState:UIControlStateNormal];   // Dragon_3
+        
         //_imgUser.image = [self getImage:userName];
         //oldUserImageName = userName;
     }
@@ -3469,6 +3456,38 @@
     return userImage;
 }
 
+// Dragon_3
+- (UIImage*) cropImage:(UIImage*)inputImage
+{
+    CGSize ori = inputImage.size;
+    CGSize newSize = CGSizeMake(ori.width, ori.width);
+    if (ori.height < ori.width) {
+        newSize = CGSizeMake(ori.height, ori.height);
+    }
+    CGFloat viewWidth = newSize.width;
+    CGFloat viewHeight = newSize.width;
+    CGRect cropRect = CGRectMake((ori.width - viewWidth) / 2, (ori.height - viewHeight) / 2, viewWidth, viewHeight);
+    
+    // viewWidth, viewHeight are dimensions of imageView
+    //    const CGFloat imageViewScale = MAX(inputImage.size.width/viewWidth, inputImage.size.height/viewHeight);
+    const CGFloat imageViewScale = 1.0;
+    // Scale cropRect to handle images larger than shown-on-screen size
+    cropRect.origin.x *= imageViewScale;
+    cropRect.origin.y *= imageViewScale;
+    cropRect.size.width *= imageViewScale;
+    cropRect.size.height *= imageViewScale;
+    
+    // Perform cropping in Core Graphics
+    CGImageRef cutImageRef = CGImageCreateWithImageInRect(inputImage.CGImage, cropRect);
+    
+    // Convert back to UIImage
+    UIImage* croppedImage = [UIImage imageWithCGImage:cutImageRef];
+    
+    // Clean up reference pointers
+    CGImageRelease(cutImageRef);
+    
+    return croppedImage;
+}
 
 @end
 

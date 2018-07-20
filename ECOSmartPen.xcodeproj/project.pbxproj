@@ -64,6 +64,7 @@
 		18D2DF4A1FB45255007190AC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18D2DF491FB45255007190AC /* UIKit.framework */; };
 		18FC2AEE1F6BFEC700B625E6 /* GuestUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FC2AED1F6BFEC700B625E6 /* GuestUserViewController.m */; };
 		18FCCA5E2063F31B009A363E /* BlueTooth.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FCCA5D2063F31B009A363E /* BlueTooth.m */; };
+		D851A7B920FB418D00C5B690 /* ProfileWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D851A7B820FB418C00C5B690 /* ProfileWebViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -240,6 +241,9 @@
 		18FC2AED1F6BFEC700B625E6 /* GuestUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GuestUserViewController.m; path = Classes/ViewController/GuestUserViewController.m; sourceTree = "<group>"; };
 		18FCCA5C2063F31B009A363E /* BlueTooth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlueTooth.h; path = Classes/Bluetooth/BlueTooth.h; sourceTree = "<group>"; };
 		18FCCA5D2063F31B009A363E /* BlueTooth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlueTooth.m; path = Classes/Bluetooth/BlueTooth.m; sourceTree = "<group>"; };
+		D851A7B720FB418C00C5B690 /* ProfileWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProfileWebViewController.h; path = Classes/ViewController/ProfileWebViewController.h; sourceTree = "<group>"; };
+		D851A7B820FB418C00C5B690 /* ProfileWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProfileWebViewController.m; path = Classes/ViewController/ProfileWebViewController.m; sourceTree = "<group>"; };
+		D851A7BA20FB431500C5B690 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -344,6 +348,7 @@
 		188C1AC91F3CA5D700165E0E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D851A7BA20FB431500C5B690 /* WebKit.framework */,
 				042ECA6120BE6BFE0035C060 /* QuartzCore.framework */,
 				042ECA5F20BE6BED0035C060 /* CoreLocation.framework */,
 				042ECA5D20BE6BD10035C060 /* MediaAccessibility.framework */,
@@ -523,6 +528,8 @@
 				18B88EC11F388CAC004EC951 /* SelectCatrigdeViewController.m */,
 				18B88EC31F388CC5004EC951 /* ProfileViewController.h */,
 				18B88EC41F388CC5004EC951 /* ProfileViewController.m */,
+				D851A7B720FB418C00C5B690 /* ProfileWebViewController.h */,
+				D851A7B820FB418C00C5B690 /* ProfileWebViewController.m */,
 				18B88ECC1F3A0152004EC951 /* AddCatrideViewController.h */,
 				18B88ECD1F3A0152004EC951 /* AddCatrideViewController.m */,
 				18FC2AEC1F6BFEC700B625E6 /* GuestUserViewController.h */,
@@ -654,6 +661,7 @@
 				18FC2AEE1F6BFEC700B625E6 /* GuestUserViewController.m in Sources */,
 				181E430B2073EDE700CC0648 /* TourParingViewController.m in Sources */,
 				18963AF62074FFF900495D66 /* SwitchSlideView.m in Sources */,
+				D851A7B920FB418D00C5B690 /* ProfileWebViewController.m in Sources */,
 				18D2DF3D1FB44DB0007190AC /* PopoverViewController.m in Sources */,
 				181E43052073EDA800CC0648 /* TourFirstViewController.m in Sources */,
 				18D2DF461FB44DD8007190AC /* CalendarView.m in Sources */,

@@ -40,7 +40,6 @@
     
     int  colorIndex;
 }
-@property (weak, nonatomic) IBOutlet UIImageView *imgUser;
 
 @property (strong, nonatomic) IBOutlet UIButton *btnCatridge;
 @property (strong, nonatomic) IBOutlet UIView *mMenuView;

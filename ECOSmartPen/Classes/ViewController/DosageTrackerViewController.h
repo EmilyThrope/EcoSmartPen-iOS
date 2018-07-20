@@ -78,6 +78,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblChildOff;
 @property (weak, nonatomic) IBOutlet UILabel *lblMyDose;
 
+@property (weak, nonatomic) IBOutlet UIButton *closeSelectingCartrigeButton;
 
 @property (weak, nonatomic) IBOutlet UILabel *lblCoinValue;
 @property (weak, nonatomic) IBOutlet UIScrollView *mainScrView;

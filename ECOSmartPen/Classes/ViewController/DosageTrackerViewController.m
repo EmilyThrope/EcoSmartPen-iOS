@@ -88,6 +88,7 @@
     save_allow = false;
     old_doseVal = 0;
     autoSaveTimer = nil;
+    [_closeSelectingCartrigeButton setHidden:YES];
     
     [self addGestureRecogniser:_mMenuView];
     [self addGestureRecogniser:_mChildSafetyView];
@@ -123,6 +124,10 @@
     _mainScrView.contentSize = CGSizeMake(width, 630);
 }
 
+- (IBAction)closeSelectingCartrige:(id)sender {
+    [_mCatridgeSelectView setHidden:YES];
+    [_closeSelectingCartrigeButton setHidden:YES];
+}
 
 -(void) initDatePicker
 {
@@ -682,6 +687,7 @@
 
 - (IBAction)catridgeButtonClick:(id)sender {
     [_mCatridgeSelectView setHidden:NO];
+    [_closeSelectingCartrigeButton setHidden:NO];
 }
 
 -(void) redrawFeelings
@@ -1425,7 +1431,7 @@
     NSString *cat = [self getSavedCatridgeName];
     sqlite3_stmt    *statement;
     sqlite3 *database;
-    NSString *convertedDateString = [NSString stringWithFormat:@"%04d-%02d-%02d", sel_last_year, sel_last_month, sel_last_day];
+    NSString *convertedDateString = [NSString stringWithFormat:@"%04d-%02d-%02d", sel_year, sel_month, sel_day];
 
     
     NSString *sql = [NSString stringWithFormat: @"SELECT count(dose) FROM vapeInf WHERE catridge='%@' AND (dt > '%@ 00:00:00' AND dt < '%@ 23:59:59')",cat, convertedDateString, convertedDateString];
@@ -2587,6 +2593,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     //[self.catTableView reloadData];
     [_mCatridgeSelectView setHidden:YES];
+    [_closeSelectingCartrigeButton setHidden:YES];
     
     NSString *catName =defaultCatridgeName;
     if([catridgsArray count]>selectCatIndex)
