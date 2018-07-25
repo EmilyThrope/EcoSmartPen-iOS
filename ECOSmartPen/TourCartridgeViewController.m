@@ -39,32 +39,38 @@
 
 - (IBAction)clickKURE:(id)sender {
     [self saveCatridgeName:@"KURE"];
-    [self performSegueWithIdentifier:@"segueDosageTracker" sender:self];
+    gotoVapeSkip = 1;
+    [self.navigationController popViewControllerAnimated:NO];
 }
 - (IBAction)clickNIGHTCAP:(id)sender {
     [self saveCatridgeName:@"NIGHT CAP"];
-    [self performSegueWithIdentifier:@"segueDosageTracker" sender:self];
+    gotoVapeSkip = 1;
+    [self.navigationController popViewControllerAnimated:NO];
 }
 - (IBAction)clickWAKE:(id)sender {
     [self saveCatridgeName:@"WAKE"];
-    [self performSegueWithIdentifier:@"segueDosageTracker" sender:self];
+    gotoVapeSkip = 1;
+    [self.navigationController popViewControllerAnimated:NO];
 }
 - (IBAction)clickCRUSECONTROL:(id)sender {
     [self saveCatridgeName:@"CRUISE CONTROL"];
-    [self performSegueWithIdentifier:@"segueDosageTracker" sender:self];
+    gotoVapeSkip = 1;
+    [self.navigationController popViewControllerAnimated:NO];
 }
 - (IBAction)clickBLAZED:(id)sender {
     [self saveCatridgeName:@"BLAZED"];
-    [self performSegueWithIdentifier:@"segueDosageTracker" sender:self];
+    gotoVapeSkip = 1;
+    [self.navigationController popViewControllerAnimated:NO];
 }
 - (IBAction)clickSkipTour:(id)sender {
-
-    [self performSegueWithIdentifier:@"segueDosageTracker" sender:self];
+    gotoVapeSkip = 1;
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 - (IBAction)clickSIGNATURESERIES:(id)sender {
     [self saveCatridgeName:@"SIGNATRE SERIES"];
-    [self performSegueWithIdentifier:@"segueDosageTracker" sender:self];
+    gotoVapeSkip = 1;
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 -(void)saveCatridgeName:(NSString*)myCat

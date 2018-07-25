@@ -39,8 +39,9 @@ extern BOOL                    isHistoryDeleteState;
 
 extern int                     ScreenWidth;
 extern int                     ScreenHeight;
-
-
+extern int                     gotoLoginFlag;
+extern int                     gotoVapeSkip;
+extern int                     gotoTourState;
 extern int                     selectScreenIndex;
 extern int                     childSafetyValue;
 extern NSString*                myDB;
@@ -69,7 +70,7 @@ extern int                     coinValue;
 #define SCREEN_PROFILE              5
 #define SCREEN_GUESTUSER            6
 #define SCREEN_LOGOUT               7
-
+#define SCREEN_TOUR                 8
 
 
 #define CHILD_SAFETY_ON_NONE        0

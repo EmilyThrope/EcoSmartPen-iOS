@@ -20,7 +20,6 @@ NSString *weekName[] = {@"Sunday", @"Monday", @"Tuesday", @"Wednesday", @"Thursd
 {
     NSString *sampleID;
 }
-- (IBAction)closeSelectingCartrige:(id)sender;
 @end
 
 @implementation DosageSchedulerViewController
@@ -56,6 +55,7 @@ NSString *weekName[] = {@"Sunday", @"Monday", @"Tuesday", @"Wednesday", @"Thursd
         dosagemount = [[array objectAtIndex:dayCount] intValue];
         _lblDosageLimit.text = [NSString stringWithFormat:@"%d", dosagemount];
         array = nil;
+        
         // Dragon
 //        _lblDay.text = weekName[dayCount];
         _txtDay.text = weekName[dayCount];
@@ -74,6 +74,8 @@ NSString *weekName[] = {@"Sunday", @"Monday", @"Tuesday", @"Wednesday", @"Thursd
     
     [self initDatePicker];
     [self progressInit];
+    
+    // Dragon
     [self initDayOfWeek];
 }
 
@@ -127,6 +129,7 @@ NSString *weekName[] = {@"Sunday", @"Monday", @"Tuesday", @"Wednesday", @"Thursd
     [_mChildSafetyView setHidden:YES];
     [_mDayList setHidden:YES];
 }
+
 
 - (IBAction)doneButtonClick:(id)sender {
     [self saveWeekDayValue:dayCount];
@@ -187,26 +190,32 @@ NSString *weekName[] = {@"Sunday", @"Monday", @"Tuesday", @"Wednesday", @"Thursd
 
 - (IBAction)dayButtonClick:(id)sender {
     // Dragon
-//    NSLog(@"Day click");
-//    [_mDayList setHidden:NO];
+    /*
+    NSLog(@"Day click");
+    [_mDayList setHidden:NO];
+     */
 }
+
 
 - (IBAction)weekdaysButtonClick:(id)sender {
     // Dragon
-//    UIButton *but = (UIButton*)sender;
-//    int tag = (int)but.tag - 700;
-//    if(tag<7)
-//    {
-//        _lblDay.text = weekName[tag];
-//        dayCount = tag;
-//
-//        NSMutableArray *array = [[NSMutableArray alloc] init];
-//        [self dayDosageArray:array];
-//        dosagemount = [[array objectAtIndex:tag] intValue];
-//        _lblDosageLimit.text = [NSString stringWithFormat:@"%d", dosagemount];
-//        array = nil;
-//    }
-//    [_mDayList setHidden:YES];
+    /*
+    UIButton *but = (UIButton*)sender;
+    int tag = (int)but.tag - 700;
+    if(tag<7)
+    {
+        _lblDay.text = weekName[tag];
+        dayCount = tag;
+
+        NSMutableArray *array = [[NSMutableArray alloc] init];
+        [self dayDosageArray:array];
+        dosagemount = [[array objectAtIndex:tag] intValue];
+        _lblDosageLimit.text = [NSString stringWithFormat:@"%d", dosagemount];
+        array = nil;
+
+    }
+    [_mDayList setHidden:YES];
+     */
 }
 
 
@@ -659,7 +668,7 @@ UIView *mkView1;
 
 -(void) initDatePicker
 {
-    datePicker1 = [[UIDatePicker alloc] init];
+    datePicker1 = [[UIDatePicker alloc]init];
     
     NSDate* result;
     NSDateComponents *comps = [[NSDateComponents alloc] init];
@@ -681,46 +690,6 @@ UIView *mkView1;
     
     [_txtDosageTime setInputAccessoryView:toolBar];
     
-}
-
--(void) initDayOfWeek
-{
-    datePicker2 = [[UIPickerView alloc] init];
-    datePicker2.dataSource = self;
-    datePicker2.delegate = self;
-    
-    [_txtDay setInputView:datePicker2];
-    
-    UIToolbar *toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
-    [toolBar setTintColor:[UIColor grayColor]];
-    UIBarButtonItem *doneBtn=[[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(showDayOfWeek)];
-    UIBarButtonItem *space=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    [toolBar setItems:[NSArray arrayWithObjects:space,doneBtn, nil]];
-    
-    [_txtDay setInputAccessoryView:toolBar];
-    
-}
-- (void)showDayOfWeek {
-    UIPickerView *picker = (UIPickerView*)_txtDay.inputView;
-    int tag = [picker selectedRowInComponent:0];
-    _txtDay.text = weekName[tag];
-    [_txtDay resignFirstResponder];
-    
-    dayCount = tag;
-    NSMutableArray *array = [[NSMutableArray alloc] init];
-    [self dayDosageArray:array];
-    dosagemount = [[array objectAtIndex:tag] intValue];
-    _lblDosageLimit.text = [NSString stringWithFormat:@"%d", dosagemount];
-    array = nil;
-}
-- (int)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
-    return 1;
-}
-- (int)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return 7;
-}
-- (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    return weekName[row];
 }
 
 -(void) dateTextField:(id)sender
@@ -847,5 +816,46 @@ UIView *mkView1;
 -(void) cancel_Progress
 {
     [self hideProgress];
+}
+
+// Dragon
+-(void) initDayOfWeek
+{
+    datePicker2 = [[UIPickerView alloc] init];
+    datePicker2.dataSource = self;
+    datePicker2.delegate = self;
+    
+    [_txtDay setInputView:datePicker2];
+    
+    UIToolbar *toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    [toolBar setTintColor:[UIColor grayColor]];
+    UIBarButtonItem *doneBtn=[[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(showDayOfWeek)];
+    UIBarButtonItem *space=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    [toolBar setItems:[NSArray arrayWithObjects:space,doneBtn, nil]];
+    
+    [_txtDay setInputAccessoryView:toolBar];
+    
+}
+- (void)showDayOfWeek {
+    UIPickerView *picker = (UIPickerView*)_txtDay.inputView;
+    int tag = [picker selectedRowInComponent:0];
+    _txtDay.text = weekName[tag];
+    [_txtDay resignFirstResponder];
+    
+    dayCount = tag;
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    [self dayDosageArray:array];
+    dosagemount = [[array objectAtIndex:tag] intValue];
+    _lblDosageLimit.text = [NSString stringWithFormat:@"%d", dosagemount];
+    array = nil;
+}
+- (int)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
+}
+- (int)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    return 7;
+}
+- (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    return weekName[row];
 }
 @end

@@ -21,6 +21,9 @@ int                     sendMode = 0;
 int                     ScreenHeight;
 int                     ScreenWidth;
 
+int                     gotoLoginFlag = 0;
+int                     gotoVapeSkip = 0;
+int                     gotoTourState = 0;
 int                     selectScreenIndex = -1;
 int                     childSafetyValue = 0;
 int                     batteryLevel = 100;

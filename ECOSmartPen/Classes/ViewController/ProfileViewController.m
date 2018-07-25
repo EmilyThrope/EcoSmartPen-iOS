@@ -36,14 +36,21 @@ NSString *oldUserImageName = @"";
     
     actionGender=[[UIActionSheet alloc] initWithTitle:@"Gender" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Male",@"Female", nil];
     
-    // Dragon_4
-    self.imgUser.layer.cornerRadius  = self.imgUser.frame.size.width / 2;
-    self.imgUser.clipsToBounds = YES;
+
     
     [self LoadAccount];
     [self progressInit];
     [self initBirthDatePicker];
     [self initImageProcess];
+    
+    _imgUser.layer.backgroundColor = [[UIColor clearColor] CGColor];
+    _imgUser.layer.cornerRadius = 75;
+    _imgUser.layer.borderWidth = 1;
+    _imgUser.clipsToBounds = true;
+    
+    // Dragon_4
+    self.imgUser.layer.cornerRadius  = self.imgUser.frame.size.width / 2;
+    self.imgUser.clipsToBounds = YES;
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
@@ -70,8 +77,8 @@ NSString *oldUserImageName = @"";
     NSString *temp = [defaults objectForKey:KEY_LASTNAME];
     if(temp != nil)
     {
-        value =[value stringByAppendingString:@" "];
-        value = [value stringByAppendingString:temp];
+        //value =[value stringByAppendingString:@" "];
+        //value = [value stringByAppendingString:temp];
     }
     
     if( value == nil )
@@ -172,10 +179,11 @@ NSString *oldUserImageName = @"";
          UIImage *image = [self getImage:defaultUserImageName];
          if(image != nil)
          {
-             _imgUser.image = [self cropImage:image]; 
+             _imgUser.image = image;
              oldUserImageName = defaultUserImageName;
              getImageStatus = false;
          }
+
      }
     
     [_lblBatteryLevel setText:[NSString stringWithFormat:@"%d %%",batteryLevel]];
@@ -311,17 +319,15 @@ NSString *oldUserImageName = @"";
 {
     UIImage *image = [self getImage:oldUserImageName];
     NSString *samName = [self getSavedName];
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     if(image != nil && ![oldUserImageName isEqualToString:@""])
     {
-        NSLog(@"cgh");
-        NSLog(@"||%@||%@||", _txtSex.text, [defaults stringForKey:KEY_GENDER]);
-            NSLog(@"||%@||%@||", _txtDOB.text, [defaults stringForKey:KEY_BIRTH]);
-            NSLog(@"||%@||%@||", _txtWeight.text, [defaults stringForKey:KEY_WEIGHT]);
-            NSLog(@"||%@||%@||", _txtHeight.text, [defaults stringForKey:KEY_HEIGHT]);
-
+//        if([samName isEqualToString: oldUserImageName])
+//        {
+//            [self homeButtonClick:nil];
+//            return;
+//        }
         // Dragon
         if([samName isEqualToString: oldUserImageName] && _txtSex.text == [defaults stringForKey:KEY_GENDER] && _txtDOB.text == [defaults stringForKey:KEY_BIRTH] && _txtWeight.text == [defaults stringForKey:KEY_WEIGHT] && _txtHeight.text == [defaults stringForKey:KEY_HEIGHT]) {
             [self homeButtonClick:nil];
@@ -376,7 +382,7 @@ NSString *oldUserImageName = @"";
     
     if([strName isEqualToString:@"Guest"])
     {
-        [self dosageTrackerButtonClick:nil];
+        [self homeButtonClick:nil];
         return;
     }
     
@@ -419,18 +425,12 @@ NSString *oldUserImageName = @"";
                 NSString * height =[temp objectForKey:@"height"];
                 NSString * weight =[temp objectForKey:@"weight"];
                 
-                // Dragon add
-//                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//                [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-//                NSDate *date  = [dateFormatter dateFromString:birth];
-//                [dateFormatter setDateFormat:@"MM-dd-yyyy"];
-//                NSString *newDate = [dateFormatter stringFromDate:date];
-                
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 [defaults setObject:sex forKey:KEY_GENDER];
                 [defaults setObject:dob forKey:KEY_BIRTH];
                 [defaults setObject:height forKey:KEY_HEIGHT];
                 [defaults setObject:weight forKey:KEY_WEIGHT];
-                [self dosageTrackerButtonClick:nil];
+                [self homeButtonClick:nil];
                 
             }
             else if([jDic objectForKey:@"error_msg"])
@@ -787,7 +787,7 @@ NSString *oldUserImageName = @"";
     NSInteger year = [components year];
     NSInteger month = [components month];
     NSInteger day = [components day];
-// Dragon   _txtDOB.text = [NSString stringWithFormat:@"%04d-%02d-%02d",(int)year, (int)month, (int)day];
+//    _txtDOB.text = [NSString stringWithFormat:@"%04d-%02d-%02d",(int)year, (int)month, (int)day];
     _txtDOB.text = [NSString stringWithFormat:@"%02d-%02d-%04d", (int)month, (int)day, (int)year];
     [_txtDOB resignFirstResponder];
 }
@@ -857,7 +857,7 @@ NSString *oldUserImageName = @"";
     CGRect cropRect = CGRectMake((ori.width - viewWidth) / 2, (ori.height - viewHeight) / 2, viewWidth, viewHeight);
     
     // viewWidth, viewHeight are dimensions of imageView
-//    const CGFloat imageViewScale = MAX(inputImage.size.width/viewWidth, inputImage.size.height/viewHeight);
+    //    const CGFloat imageViewScale = MAX(inputImage.size.width/viewWidth, inputImage.size.height/viewHeight);
     const CGFloat imageViewScale = 1.0;
     // Scale cropRect to handle images larger than shown-on-screen size
     cropRect.origin.x *= imageViewScale;

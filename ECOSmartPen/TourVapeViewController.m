@@ -7,6 +7,7 @@
 //
 
 #import "TourVapeViewController.h"
+#import "Const.h"
 
 @interface TourVapeViewController ()
 @property (nonatomic,retain) SwitchSlideView *switchSlide;
@@ -36,9 +37,22 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    if(gotoVapeSkip == 1)
+    {
+        gotoVapeSkip = 0;
+        selectScreenIndex = SCREEN_HOME;
+        [self saveTourVapePassState:true];
+        [self.navigationController popViewControllerAnimated:NO];
+    }
+}
+
 - (IBAction)clickSkipTour:(id)sender {
     [self saveTourVapePassState:true];
-    [self performSegueWithIdentifier:@"segueDosageTracker" sender:self];
+    selectScreenIndex = SCREEN_HOME;
+    [self.navigationController popViewControllerAnimated:NO];
 }
 - (IBAction)clickPair:(id)sender {
     [self saveTourVapePassState:true];

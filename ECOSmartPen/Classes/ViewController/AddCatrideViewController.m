@@ -69,13 +69,14 @@ float color_array[] = {93,0,128,0,24,255,0,153,36,255,233,0,229,79,0,138,26,255,
 
 
 - (void)viewWillAppear:(BOOL)animated
-{   
+{
     switch (sendMode)
     {
         case SEND_CATRIDGE_ADDMODE:
-            //_txtSampleName.text = @""; //Dragon_1
-            //_txtSampleID.text = @"";
-            //oldSampleName= @"";
+            // Dragon_01
+//            _txtSampleName.text = @"";
+//            _txtSampleID.text = @"";
+//            oldSampleName= @"";
             break;
         case SEND_CATRIDGE_DEFAULT:
             [_txtSampleName setEnabled:false];
@@ -95,7 +96,7 @@ float color_array[] = {93,0,128,0,24,255,0,153,36,255,233,0,229,79,0,138,26,255,
         UIImage *image = [self getImage:defaultImageName];
         if(image != nil)
         {
-            [_imgCartridge setImage:[self cropImage:image]];
+            [_imgCartridge setImage:image];
             oldImageName = defaultImageName;
             getImageStatus = false;
         }
@@ -121,11 +122,11 @@ float color_array[] = {93,0,128,0,24,255,0,153,36,255,233,0,229,79,0,138,26,255,
         [self showToastShort:@"Please input sample name."];
         return;
     }
-    /*else if ([_txtSampleID.text length] < 1)
+    else if ([_txtSampleID.text length] < 1)
     {
          [self showToastShort:@"Please input sample ID."];
         return;
-    }*/
+    }
     if(sendMode == SEND_CATRIDGE_ADDMODE)
     {
         [self addData];
@@ -295,7 +296,7 @@ float color_array[] = {93,0,128,0,24,255,0,153,36,255,233,0,229,79,0,138,26,255,
         NSLog(@"\nfilePath : %@ \n", filePath);
         if([fm fileExistsAtPath:filePath isDirectory:nil])
         {
-            _imgCartridge.image = [self cropImage:[self getImage:sendCatName]];
+            _imgCartridge.image = [self getImage:sendCatName];
             oldImageName = sendCatName;
         }
     }
@@ -671,36 +672,5 @@ float color_array[] = {93,0,128,0,24,255,0,153,36,255,233,0,229,79,0,138,26,255,
             result = @"guest";
     }
     return result;
-}
-- (UIImage*) cropImage:(UIImage*)inputImage
-{
-    CGSize ori = inputImage.size;
-    CGSize newSize = CGSizeMake(ori.width, ori.width);
-    if (ori.height < ori.width) {
-        newSize = CGSizeMake(ori.height, ori.height);
-    }
-    CGFloat viewWidth = newSize.width;
-    CGFloat viewHeight = newSize.width;
-    CGRect cropRect = CGRectMake((ori.width - viewWidth) / 2, (ori.height - viewHeight) / 2, viewWidth, viewHeight);
-    
-    // viewWidth, viewHeight are dimensions of imageView
-    //    const CGFloat imageViewScale = MAX(inputImage.size.width/viewWidth, inputImage.size.height/viewHeight);
-    const CGFloat imageViewScale = 1.0;
-    // Scale cropRect to handle images larger than shown-on-screen size
-    cropRect.origin.x *= imageViewScale;
-    cropRect.origin.y *= imageViewScale;
-    cropRect.size.width *= imageViewScale;
-    cropRect.size.height *= imageViewScale;
-    
-    // Perform cropping in Core Graphics
-    CGImageRef cutImageRef = CGImageCreateWithImageInRect(inputImage.CGImage, cropRect);
-    
-    // Convert back to UIImage
-    UIImage* croppedImage = [UIImage imageWithCGImage:cutImageRef];
-    
-    // Clean up reference pointers
-    CGImageRelease(cutImageRef);
-    
-    return croppedImage;
 }
 @end

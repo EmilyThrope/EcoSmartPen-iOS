@@ -106,6 +106,12 @@
 {
     [super viewWillAppear:animated];
     [[self navigationController] setNavigationBarHidden:YES animated:NO];
+    if(gotoLoginFlag == 1)
+    {
+        [self LoadAccount];
+        [self performSegueWithIdentifier:@"segueHome" sender:nil];
+        gotoLoginFlag = 0;
+    }
 }
 
 
@@ -175,14 +181,8 @@
                 [defaults setObject:height forKey:KEY_HEIGHT];
                 [defaults setObject:weight forKey:KEY_WEIGHT];
                 
-                NSString *res = [self getTourVapePassState];
-                if(![res isEqualToString:@"pass"])
-                {
-                    [self performSegueWithIdentifier:@"segueTourVape" sender:nil];
-                }
-                else{
-                    [self performSegueWithIdentifier:@"segueHome" sender:nil];
-                }
+                [self performSegueWithIdentifier:@"segueHome" sender:nil];
+                
             }
             else if([jDic objectForKey:@"error_msg"])
             {
@@ -268,12 +268,12 @@
     NSString *res = [self getTourVapePassState];
     if(![res isEqualToString:@"pass"])
     {
-        [self performSegueWithIdentifier:@"segueTourVape" sender:nil];
+        [self performSegueWithIdentifier:@"segueHome" sender:nil];
     }
     else{
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [defaults setObject:@"Male" forKey:KEY_GENDER];
-        [defaults setObject:@"01-01-2000" forKey:KEY_BIRTH];
+        [defaults setObject:@"2000-01-01" forKey:KEY_BIRTH];
         [defaults setObject:@"Guest" forKey:KEY_FIRSTNAME];
         [defaults setObject:@" " forKey:KEY_LASTNAME];
         [defaults setObject:@"6 feet" forKey:KEY_HEIGHT];

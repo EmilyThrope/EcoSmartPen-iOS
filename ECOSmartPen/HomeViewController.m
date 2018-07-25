@@ -125,6 +125,10 @@
     int width = self.view.frame.size.width;
     _scrollFFView.contentSize = CGSizeMake(width*3, 230);
     
+    
+//    _btnUserImage.layer.cornerRadius= 25;
+//    _btnUserImage.clipsToBounds = true;
+    
     // Dragon_3
     _btnUserImage.layer.cornerRadius  = _btnUserImage.frame.size.width / 2;
     _btnUserImage.clipsToBounds = YES;
@@ -330,12 +334,27 @@
 }
 
 
+-(NSString*)getTourVapePassState
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *result = @"first";
+    if (standardUserDefaults) {
+        result=(NSString*)[standardUserDefaults valueForKey:@"vape_tour"];
+    }
+    return result;
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [[self navigationController] setNavigationBarHidden:YES animated:NO];
     [self gotoScreen:selectScreenIndex];
+    
+    NSString *res = [self getTourVapePassState];
+    if(![res isEqualToString:@"pass"])
+    {
+        [self performSegueWithIdentifier:@"segueTourVape" sender:nil];
+    }
     
     if(selectScreenIndex != SCREEN_LOGOUT)
     {
@@ -536,8 +555,7 @@
     data[2] = 1;
     NSData *cmdData = [[NSData alloc] initWithBytes:data length:3];
     //gotoFlag = 1;
-    [self sendBLEData:cmdData];
-}
+    [self sendBLEData:cmdData];}
 
 - (IBAction)childSafetyOnButtonClick:(id)sender {
     NSLog(@"Off Button Click");
@@ -648,7 +666,7 @@
     {
         if([[checkFeelingArray objectAtIndex:i] boolValue] == true)
         {
-            if(i % 4 <2)
+            if(i % 2 == 0)
             {
                 count++;
             }
@@ -658,7 +676,7 @@
             }
         }
     }
-    coinValue = coinTempValue + count;
+    coinTempValue = coinTempValue + count;
     
     [self hideFeelings];
     [autoSaveTimer invalidate];
@@ -666,6 +684,14 @@
     [self showSymptoms];
     save_allow = false;
     feelingSaveFlag = true;
+    
+    ////////////////////////////////////////////////////////////
+    levelCount = 0;
+    NSString *nameStr = [NSString stringWithFormat:@"vape_level_%d", levelCount];
+    _imgVapeLevel.image = [UIImage imageNamed:nameStr];
+    coinValue = coinTempValue;
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(updateCoin) userInfo:nil repeats:NO];
+
 }
 
 -(void) nextDrawFeelingProcess
@@ -705,6 +731,8 @@
     [self loadFeeling:tempRArray];
     tempArray = nil;
     saveFeel = [NSString stringWithString: feelStr];
+    
+    
 }
 
 - (IBAction)feelingCancelButtonClick:(id)sender {
@@ -791,7 +819,6 @@
     
     [self sendMyVape:saveFeel symptoms:saveSymp];
     
-    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(updateCoin) userInfo:nil repeats:NO];
 }
 
 -(void) updateCoin
@@ -846,15 +873,16 @@
 - (IBAction)tellUSButtonClick:(id)sender {
     [self hideConfirmFeeling];
     [self showFeelings];
+    
+    coinTempValue = coinValue;
     if(feel_state == 2)
     {
-        coinValue -= 1;
+        coinTempValue -= 1;
     }
     else if(feel_state == 1)
     {
-        coinValue += 1;
+        coinTempValue += 1;
     }
-    coinTempValue = coinValue;
 }
 
 - (IBAction)anotherDoesButtonClick:(id)sender {
@@ -867,6 +895,13 @@
     {
         coinValue += 1;
     }
+    ///////////////////////////////////////////////
+    levelCount = 0;
+    NSString *nameStr = [NSString stringWithFormat:@"vape_level_%d", levelCount];
+    _imgVapeLevel.image = [UIImage imageNamed:nameStr];
+    [_btnFeelYes setImage:[UIImage imageNamed:@"feel_yes"] forState:UIControlStateNormal];
+    [_btnFeelNo setImage:[UIImage imageNamed:@"feel_no"] forState:UIControlStateNormal];
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(updateCoin) userInfo:nil repeats:NO];
 }
 
 #pragma mark - Move Function
@@ -2608,11 +2643,13 @@
         case CHILD_SAFETY_ON_NONE:
             [_childSafetyButton setImage:simage_childonnone forState:UIControlStateNormal];
             [_childSafetyButton setEnabled:false];
+            
             _lblTotal.text = @"Child Safety ON";   // Dragon_3
             break;
         case CHILD_SAFETY_OFF_NONE:
             [_childSafetyButton setImage:simage_childoffnone forState:UIControlStateNormal];
             [_childSafetyButton setEnabled:false];
+            
             _lblTotal.text = @"Child Safety OFF";    // Dragon_3
             break;
         case CHILD_SAFETY_ON:
@@ -2621,6 +2658,7 @@
             [_childSafetyButton setEnabled:true];
             _lblChildOn.font = [UIFont boldSystemFontOfSize:22.0];
             _lblChildOff.font = [UIFont systemFontOfSize:20.0];
+//            _lblTotal.text = @"Child Safety ON";
             _lblTotal.text = @"Child Safety OFF";   // Dragon_3
             break;
         case CHILD_SAFETY_OFF:
@@ -2629,6 +2667,7 @@
             [_childSafetyButton setEnabled:true];
             _lblChildOff.font = [UIFont boldSystemFontOfSize:22.0];
             _lblChildOn.font = [UIFont systemFontOfSize:20.0];
+//            _lblTotal.text = @"Child Safety OFF";
             _lblTotal.text = @"Child Safety ON";    // Dragon_3
             break;
     }
@@ -3488,6 +3527,5 @@
     
     return croppedImage;
 }
-
 @end
 

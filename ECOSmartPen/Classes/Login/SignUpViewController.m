@@ -181,15 +181,8 @@ bool isLoging = NO;
                 [defaults setObject:height forKey:KEY_HEIGHT];
                 [defaults setObject:weight forKey:KEY_WEIGHT];
                 
-                NSString *res = [self getTourVapePassState];
-                if(![res isEqualToString:@"pass"])
-                {
-                    [self performSegueWithIdentifier:@"segueTourVape" sender:nil];
-                }
-                else{
-                    [self performSegueWithIdentifier:@"segueHome" sender:nil];
-                }
-                
+                gotoLoginFlag = 1;
+                [self.navigationController popViewControllerAnimated:NO];
                 isLoging = YES;
             }
             else if([jDic objectForKey:@"error_msg"])
